@@ -10,8 +10,8 @@ public class BoardController : MonoBehaviour
 
     Dictionary<Tile, GameObject> tileToGameObjectMap;
     Board board;
-    int height = 8;
-    int width = 8;
+    int rows = 8;
+    int cols = 8;
 
     public Board Board
     {
@@ -33,24 +33,22 @@ public class BoardController : MonoBehaviour
             return;
 
         Instance = this;
-        board = new Board(height, width, BoardStyle.Default);
+        board = new Board(rows, cols, BoardStyle.Default);
         tileToGameObjectMap = new Dictionary<Tile, GameObject>();
 
-        for (int y = 0; y < height; y++)
+        for (int c = 0; c < cols; c++)
         {
-            for (int x = 0; x < width; x++)
+            for (int r = 0; r < rows; r++)
             {
-                Tile tile = board.GetTileAt(y,x);
-                GameObject tileGO = new GameObject(string.Format("{0},{1} Tile", y, x));
+                Tile tile = board.GetTileAt(r, c);
+                GameObject tileGO = new GameObject();
+                tileGO.name = string.Format("{0},{1} Tile", c, r);
                 tileGO.transform.SetParent(this.transform);
-                tileGO.transform.position = new Vector3(x-3, y-3, transform.position.z);
+                tileGO.transform.position = new Vector3(r, c, transform.position.z);
                 tileGO.AddComponent<SpriteRenderer>();
                 tileToGameObjectMap.Add(tile, tileGO);
             }
         }
-
-
-
     }
 
     public GameObject GetGameObjectOfTile(Tile tile)
@@ -60,6 +58,7 @@ public class BoardController : MonoBehaviour
         
         return tileToGameObjectMap[tile];
     }
+
     // Update is called once per frame
     void Update()
     {

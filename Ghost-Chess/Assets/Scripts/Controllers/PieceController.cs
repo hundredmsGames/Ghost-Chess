@@ -11,24 +11,29 @@ public class PieceController : MonoBehaviour {
 
     Dictionary<Piece, GameObject> pieceToGameObjectMap;
     BoardController boardController;
+    Board board;
+
 	// Use this for initialization
-	void Awake () {
+	void Awake ()
+    {
         if (Instance != null)
             return;
 
         Instance = this;
-
         pieceToGameObjectMap = new Dictionary<Piece, GameObject>();
         boardController = BoardController.Instance;
-        for (int i = 0; i < boardController.Board.Pieces.Count; i++)
-        {
-            GameObject goPiece = new GameObject(boardController.Board.Pieces[i].GetType().FullName);
-            goPiece.transform.SetParent(this.transform);
-            goPiece.transform.position = new Vector3(boardController.Board.Pieces[i].Tile.X-3, boardController.Board.Pieces[i].Tile.Y-3);
-            goPiece.AddComponent<SpriteRenderer>();
-            pieceToGameObjectMap.Add(boardController.Board.Pieces[i], goPiece);
-        }
+        board = boardController.Board;
 
+        for (int i = 0; i < board.Pieces.Count; i++)
+        {
+            Piece piece = board.Pieces[i];
+            GameObject pieceGO = new GameObject();
+            pieceGO.name = piece.GetType().FullName;
+            pieceGO.transform.SetParent(this.transform);
+            pieceGO.transform.position = new Vector3(piece.Tile.C, piece.Tile.R);
+            pieceGO.AddComponent<SpriteRenderer>();
+            pieceToGameObjectMap.Add(boardController.Board.Pieces[i], pieceGO);
+        }
 	}
 	
     public GameObject GetGameObjectOfPiece(Piece piece)

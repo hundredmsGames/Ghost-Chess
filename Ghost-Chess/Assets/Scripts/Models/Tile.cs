@@ -6,38 +6,38 @@ public class Tile
 {
     private Piece piece;
 
-    private int x;
-    private int y;
+    private int r;
+    private int c;
 
-    public Tile(int x, int y)
+    public Tile(int r, int c)
     {
-        this.x = x;
-        this.y = y;
+        this.r = r;
+        this.c = c;
     }
 
-    public int X
+    public int R
     {
         get
         {
-            return x;
+            return r;
         }
 
        protected set
         {
-            x = value;
+            r = value;
         }
     }
 
-    public int Y
+    public int C
     {
         get
         {
-            return y;
+            return c;
         }
 
         protected set
         {
-            y = value;
+            c = value;
         }
     }
 }

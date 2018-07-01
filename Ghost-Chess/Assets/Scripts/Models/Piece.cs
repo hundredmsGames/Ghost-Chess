@@ -7,10 +7,10 @@ public class Piece
     private Tile tile;
     private PieceColor color;
 
-    public Piece(PieceColor color, int x, int y, string name = "")
+    public Piece(PieceColor color, int r, int c, string name = "")
     {
         this.color = color;
-        tile = new Tile(x, y);
+        tile = new Tile(r, c);
         this.name = name;
     }
 

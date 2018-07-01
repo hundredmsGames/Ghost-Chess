@@ -10,6 +10,7 @@ public class Board
 
     public delegate void PieceSpriteChangedHandler(Tile oldTile, Tile newTile);
     public event PieceSpriteChangedHandler PieceSpriteChanged;
+
     // This probably should not be here
     private string[,] pieceMap = new string[,]
     {
@@ -24,16 +25,16 @@ public class Board
     };
 
     private BoardStyle style;
-    private int width;
-    private int height;
+    private int rows;
+    private int cols;
 
     private Tile[,] tiles;
     private List<Piece> pieces;
 
-    public Board(int width, int height, BoardStyle style)
+    public Board(int rows, int cols, BoardStyle style)
     {
-        this.width = width;
-        this.height = height;
+        this.rows = rows;
+        this.cols = cols;
         this.style = style;
         pieces = new List<Piece>();
 
@@ -45,75 +46,69 @@ public class Board
 
     private void CreateTiles()
     {
-        tiles = new Tile[width, height];
+        tiles = new Tile[rows, cols];
 
-        for (int x = 0; x < width; x++)
+        for (int r = 0; r < rows; r++)
         {
-            for (int y = 0; y < height; y++)
+            for (int c = 0; c < cols; c++)
             {
-                tiles[x, y] = new Tile(x, y);
+                tiles[r, c] = new Tile(r, c);
             }
         }
     }
-    public Tile GetTileAt(int x, int y)
-    {
-        if (x > width || x < 0 || y > height || y < 0)
-            return null;
 
-        return tiles[x, y];
-    }
     private void CreatePieces()
     {
-        if (pieceMap.GetLength(0) != width || pieceMap.GetLength(1) != height)
+        if (pieceMap.GetLength(0) != rows || pieceMap.GetLength(1) != cols)
         {
             Debug.LogError("Piece map does not match with the given width and height.");
             return;
         }
 
-        for (int x = 0; x < width; x++)
+        for (int r = 0; r < rows; r++)
         {
-            for (int y = 0; y < height; y++)
+            for (int c = 0; c < cols; c++)
             {
-                CreatePiece(x, y);
+                CreatePiece(r, c);
             }
         }
     }
 
-    private void CreatePiece(int x, int y)
+    private void CreatePiece(int r, int c)
     {
         
         Piece piece;
         PieceColor color = PieceColor.White;
 
-        if (pieceMap[x, y][0] == 'w')
+        if (pieceMap[rows - r - 1, c][0] == 'w')
         {
             color = PieceColor.White;
         }
-        else if (pieceMap[x, y][0] == 'b')
+        else if (pieceMap[rows - r - 1, c][0] == 'b')
         {
             color = PieceColor.Black;
         }
         else
             return;
-        switch (pieceMap[x, y][1])
+        switch (pieceMap[rows - r - 1, c][1])
         {
             case 'r':
-                piece = new Rook(color, x, y, "Rook");
+                piece = new Rook(color, r, c, "Rook");
                 break;
             case 'n':
-                piece = new Knight(color, x, y,"Knight");
+                piece = new Knight(color, r, c,"Knight");
                 break;
             case 'b':
-                piece = new Bishop(color, x, y, "Bishop");
+                piece = new Bishop(color, r, c, "Bishop");
                 break;
             case 'q':
-                piece = new Queen(color, x, y, "Queen");
+                piece = new Queen(color, r, c, "Queen");
                 break;
             case 'k':
-                piece = new King(color, x, y, "King");
+                piece = new King(color, r, c, "King");
                 break;
             case 'p':
-                piece = new Pawn(color, x, y, "Pawn");
+                piece = new Pawn(color, r, c, "Pawn");
                 break;
             default:
                 piece = null;
@@ -123,16 +118,24 @@ public class Board
         pieces.Add(piece);
     }
 
-    public int Width
+    public Tile GetTileAt(int r, int c)
     {
-        get { return width; }
-        set { width = value; }
+        if (r >= rows || r < 0 || c >= cols || c < 0)
+            return null;
+
+        return tiles[r, c];
     }
 
-    public int Height
+    public int Rows
     {
-        get { return height; }
-        set { height = value; }
+        get { return rows; }
+        set { rows = value; }
+    }
+
+    public int Cols
+    {
+        get { return cols; }
+        set { cols = value; }
     }
 
     public BoardStyle Style
