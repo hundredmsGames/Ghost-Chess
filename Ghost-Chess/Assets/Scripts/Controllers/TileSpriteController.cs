@@ -7,6 +7,8 @@ using UnityEngine;
 public class TileSpriteController : MonoBehaviour {
 
     Board board;
+    string piecesSortingLayer = "Pieces";
+    PieceController pieceController;
     Dictionary<BoardStyle,KeyValuePair<Sprite,Sprite>> boardStyleToSpriteMap;
 	// Use this for initialization
 	void Start () {
@@ -14,6 +16,9 @@ public class TileSpriteController : MonoBehaviour {
         board.BoardStyleChanged += Board_BoardStyleChanged;
 
         Board_BoardStyleChanged(board.Style);
+
+        pieceController = PieceController.Instance;
+        SetPieceSprites();
 	}
 
     private void Board_BoardStyleChanged(BoardStyle boardStyle)
@@ -31,6 +36,21 @@ public class TileSpriteController : MonoBehaviour {
                     tileGO.GetComponent<SpriteRenderer>().sprite = whiteToBlack.Value;
             }
         }
+    }
+    void SetPieceSprites()
+    {
+        for (int i = 0; i < board.Pieces.Count; i++)
+        {
+            GameObject pieceGO = pieceController.GetGameObjectOfPiece(board.Pieces[i]);
+            pieceGO.GetComponent<SpriteRenderer>().sprite = GetSpriteForPiece(board.Pieces[i]);
+            pieceGO.GetComponent<SpriteRenderer>().sortingLayerName = piecesSortingLayer;
+
+        }
+    }
+
+    private Sprite GetSpriteForPiece(Piece piece)
+    {
+        return Resources.Load<Sprite>(string.Format("Pieces\\{0}_{1}{2}", board.Style,piece.Color.ToString(), piece.Name));
     }
 
     // Update is called once per frame

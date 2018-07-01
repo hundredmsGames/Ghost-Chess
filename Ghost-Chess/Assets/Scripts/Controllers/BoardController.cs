@@ -27,7 +27,7 @@ public class BoardController : MonoBehaviour
     }
 
     // Use this for initialization
-    void Awake()
+    void OnEnable()
     {
         if (Instance != null)
             return;

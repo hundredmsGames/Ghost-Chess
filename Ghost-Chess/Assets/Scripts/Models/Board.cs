@@ -7,6 +7,9 @@ public class Board
 {
     public delegate void BoardStyleChangedHandler(BoardStyle boardStyle);
     public event BoardStyleChangedHandler BoardStyleChanged;
+
+    public delegate void PieceSpriteChangedHandler(Tile oldTile, Tile newTile);
+    public event PieceSpriteChangedHandler PieceSpriteChanged;
     // This probably should not be here
     private string[,] pieceMap = new string[,]
     {
@@ -32,7 +35,7 @@ public class Board
         this.width = width;
         this.height = height;
         this.style = style;
-      
+        pieces = new List<Piece>();
 
         CreateTiles();
         CreatePieces();
@@ -43,10 +46,10 @@ public class Board
     private void CreateTiles()
     {
         tiles = new Tile[width, height];
-      
-        for(int x = 0; x < width; x++)
+
+        for (int x = 0; x < width; x++)
         {
-            for(int y = 0; y < height; y++)
+            for (int y = 0; y < height; y++)
             {
                 tiles[x, y] = new Tile(x, y);
             }
@@ -57,19 +60,19 @@ public class Board
         if (x > width || x < 0 || y > height || y < 0)
             return null;
 
-        return tiles[x,y];
+        return tiles[x, y];
     }
     private void CreatePieces()
     {
-        if(pieceMap.GetLength(0) != width || pieceMap.GetLength(1) != height)
+        if (pieceMap.GetLength(0) != width || pieceMap.GetLength(1) != height)
         {
             Debug.LogError("Piece map does not match with the given width and height.");
             return;
         }
 
-        for(int x = 0; x < width; x++)
+        for (int x = 0; x < width; x++)
         {
-            for(int y = 0; y < height; y++)
+            for (int y = 0; y < height; y++)
             {
                 CreatePiece(x, y);
             }
@@ -78,7 +81,7 @@ public class Board
 
     private void CreatePiece(int x, int y)
     {
-        pieces = new List<Piece>();
+        
         Piece piece;
         PieceColor color = PieceColor.White;
 
@@ -86,30 +89,31 @@ public class Board
         {
             color = PieceColor.White;
         }
-        else if(pieceMap[x, y][0] == 'b')
+        else if (pieceMap[x, y][0] == 'b')
         {
             color = PieceColor.Black;
         }
-
-        switch(pieceMap[x, y][1])
+        else
+            return;
+        switch (pieceMap[x, y][1])
         {
             case 'r':
-                piece = new Rook(color, x, y);
+                piece = new Rook(color, x, y, "Rook");
                 break;
             case 'n':
-                piece = new Knight(color, x, y);
+                piece = new Knight(color, x, y,"Knight");
                 break;
             case 'b':
-                piece = new Bishop(color, x, y);
+                piece = new Bishop(color, x, y, "Bishop");
                 break;
             case 'q':
-                piece = new Queen(color, x, y);
+                piece = new Queen(color, x, y, "Queen");
                 break;
             case 'k':
-                piece = new King(color, x, y);
+                piece = new King(color, x, y, "King");
                 break;
             case 'p':
-                piece = new Pawn(color, x, y);
+                piece = new Pawn(color, x, y, "Pawn");
                 break;
             default:
                 piece = null;
@@ -144,7 +148,7 @@ public class Board
             return pieces;
         }
 
-      protected  set
+        protected set
         {
             pieces = value;
         }
