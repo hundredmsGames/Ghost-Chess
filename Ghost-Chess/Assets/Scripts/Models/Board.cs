@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Board
 {
+    public delegate void BoardStyleChangedHandler(BoardStyle boardStyle);
+    public event BoardStyleChangedHandler BoardStyleChanged;
     // This probably should not be here
     private string[,] pieceMap = new string[,]
     {
@@ -30,23 +32,33 @@ public class Board
         this.width = width;
         this.height = height;
         this.style = style;
+      
 
         CreateTiles();
         CreatePieces();
+        if (BoardStyleChanged != null)
+            BoardStyleChanged(style);
     }
 
     private void CreateTiles()
     {
         tiles = new Tile[width, height];
+      
         for(int x = 0; x < width; x++)
         {
-            for(int y = 0; y < height; x++)
+            for(int y = 0; y < height; y++)
             {
                 tiles[x, y] = new Tile(x, y);
             }
         }
     }
+    public Tile GetTileAt(int x, int y)
+    {
+        if (x > width || x < 0 || y > height || y < 0)
+            return null;
 
+        return tiles[x,y];
+    }
     private void CreatePieces()
     {
         if(pieceMap.GetLength(0) != width || pieceMap.GetLength(1) != height)
@@ -66,6 +78,7 @@ public class Board
 
     private void CreatePiece(int x, int y)
     {
+        pieces = new List<Piece>();
         Piece piece;
         PieceColor color = PieceColor.White;
 
@@ -122,5 +135,18 @@ public class Board
     {
         get { return style; }
         set { style = value; }
+    }
+
+    public List<Piece> Pieces
+    {
+        get
+        {
+            return pieces;
+        }
+
+      protected  set
+        {
+            pieces = value;
+        }
     }
 }

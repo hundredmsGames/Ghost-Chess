@@ -5,18 +5,16 @@ using UnityEngine;
 public class PieceController : MonoBehaviour {
 
     Dictionary<Piece, GameObject> pieceToGameObjectMap;
-    int pieceCount=16;
+    BoardController boardController;
 	// Use this for initialization
 	void Start () {
         pieceToGameObjectMap = new Dictionary<Piece, GameObject>();
-
-        for (int i = 0; i < pieceCount; i++)
+        boardController = BoardController.Instance;
+        for (int i = 0; i < boardController.Board.Pieces.Count; i++)
         {
-            Piece piece = new Piece();
-            GameObject pieceGO = new GameObject();
-            pieceGO.AddComponent<SpriteRenderer>();
-            pieceGO.transform.SetParent(this.transform);
-            pieceToGameObjectMap.Add(piece, pieceGO);
+            GameObject goPiece = new GameObject(boardController.Board.Pieces[i].GetType().FullName);
+            goPiece.transform.SetParent(this.transform);
+            pieceToGameObjectMap.Add(boardController.Board.Pieces[i], goPiece);
         }
 
 	}
