@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public class Tile
 {
+    private Piece piece;
+
     private int x;
     private int y;
 
