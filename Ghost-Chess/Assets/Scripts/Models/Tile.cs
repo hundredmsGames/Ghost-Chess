@@ -40,4 +40,17 @@ public class Tile
             c = value;
         }
     }
+
+    public Piece Piece
+    {
+        get
+        {
+            return piece;
+        }
+
+        set
+        {
+            piece = value;
+        }
+    }
 }

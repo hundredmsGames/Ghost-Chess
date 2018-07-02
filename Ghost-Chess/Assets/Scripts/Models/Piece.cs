@@ -6,8 +6,9 @@ public class Piece
     private string name;
     private Tile tile;
     private PieceColor color;
+    private Board board;
 
-    public Piece(PieceColor color, int r, int c, string name = "")
+    public Piece(Board board,PieceColor color, int r, int c, string name = "")
     {
         this.color = color;
         tile = new Tile(r, c);

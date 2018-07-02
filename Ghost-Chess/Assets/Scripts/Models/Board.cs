@@ -11,6 +11,12 @@ public class Board
     public delegate void PieceSpriteChangedHandler(Tile oldTile, Tile newTile);
     public event PieceSpriteChangedHandler PieceSpriteChanged;
 
+    public Tile this[int r,int c]
+    {
+        get { return tiles[r,c]; }
+        set { tiles[r,c] = value; }
+    }
+
     // This probably should not be here
     private string[,] pieceMap = new string[,]
     {
@@ -76,7 +82,7 @@ public class Board
 
     private void CreatePiece(int r, int c)
     {
-        
+
         Piece piece;
         PieceColor color = PieceColor.White;
 
@@ -93,22 +99,28 @@ public class Board
         switch (pieceMap[rows - r - 1, c][1])
         {
             case 'r':
-                piece = new Rook(color, r, c, "Rook");
+                piece = new Rook(this, color, r, c, "Rook");
+                tiles[r, c].Piece = piece;
                 break;
             case 'n':
-                piece = new Knight(color, r, c,"Knight");
+                piece = new Knight(this, color, r, c, "Knight");
+                tiles[r, c].Piece = piece;
                 break;
             case 'b':
-                piece = new Bishop(color, r, c, "Bishop");
+                piece = new Bishop(this, color, r, c, "Bishop");
+                tiles[r, c].Piece = piece;
                 break;
             case 'q':
-                piece = new Queen(color, r, c, "Queen");
+                piece = new Queen(this, color, r, c, "Queen");
+                tiles[r, c].Piece = piece;
                 break;
             case 'k':
-                piece = new King(color, r, c, "King");
+                piece = new King(this, color, r, c, "King");
+                tiles[r, c].Piece = piece;
                 break;
             case 'p':
-                piece = new Pawn(color, r, c, "Pawn");
+                piece = new Pawn(this, color, r, c, "Pawn");
+                tiles[r, c].Piece = piece;
                 break;
             default:
                 piece = null;
