@@ -1,1 +1,1 @@
-# Ghost-Chess
+# ghost-chess
